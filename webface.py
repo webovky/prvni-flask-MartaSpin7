@@ -36,6 +36,9 @@ def info():
 def abc():
     return render_template("abc.html", slova=slova)
 
+@app.route("/banán/")
+def banán():
+    return render_template("banán.html")
 
 @app.route("/text/")
 def text():
