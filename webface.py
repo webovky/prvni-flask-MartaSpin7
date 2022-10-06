@@ -1,3 +1,4 @@
+from pickle import GET
 from flask import Flask, render_template, request, redirect, url_for, session
 import functools
 
@@ -36,9 +37,18 @@ def info():
 def abc():
     return render_template("abc.html", slova=slova)
 
-@app.route("/banán/")
+@app.route("/banán/", methods=["GET", "POST"])
 def banán():
-    return render_template("banán.html")
+    hmotnost= request.args.get("hmotnost")
+    
+    výška= request.args.get("výška")
+
+    print(hmotnost, výška)
+    if hmotnost and výška != None :  
+        bmi=int(hmotnost) / ((int(výška)/100)**2)
+    else:
+        bmi = 0
+    return render_template("banán.html", bmi=bmi)
 
 @app.route("/text/")
 def text():
