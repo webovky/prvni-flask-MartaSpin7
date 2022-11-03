@@ -26,8 +26,8 @@ Jaaaaj!!! Nejsi přihlášen <a href="{{url_for('login')}}">Přihlas se!</a>
 
 </p>
 
-{% for message in get_flashed_messages() %}
-<p class="flesh">{{message}}
+{% for category,message in get_flashed_messages(with_categories=true) %}
+<p class="flesh" {{category}}>{{message}}
 </p>
 {% endfor %}
   <nav>
