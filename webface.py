@@ -1,5 +1,5 @@
 from pickle import GET
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for, session, flash
 import functools
 
 # from werkzeug.security import generate_password_hash, check_password_hash
@@ -39,6 +39,10 @@ def abc():
 
 @app.route("/banán/", methods=["GET", "POST"])
 def banán():
+    if 'uživatel' not in session:
+        flash('Nejsi příhlášen, tato stránka vyžaduje přihlášení')
+        return redirect(url_for('login'))
+        
     hmotnost= request.args.get("hmotnost")
     
     výška= request.args.get("výška")
@@ -59,3 +63,25 @@ def text():
 <p>toto je text</p>
 
 """
+@app.route("/login/", methods=["GET"])
+def login():
+    jmeno = request.args.get('jmeno')
+    heslo = request.args.get('heslo')
+    print(jmeno, heslo)
+    if request.method == 'GET':
+        return render_template( 'login.html')
+
+@app.route("/login/", methods=["POST"])
+def login_post():
+     jmeno = request.form.get('jmeno')
+     heslo = request.form.get('heslo')
+     if jmeno == 'Martin' and heslo=='umbilikus':
+        session['uživatel'] = jmeno
+              
+     return redirect( url_for ('login'))
+        #stejne jako funkce get, jen jiný zápis
+
+@app.route("/logout/", methods=["GET"])
+def logout():
+    session.pop('uživatel', None)
+    return redirect( url_for ('login'))
