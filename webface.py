@@ -35,13 +35,16 @@ def info():
 
 @app.route("/abc/")
 def abc():
+    if 'uživatel' not in session:
+        flash('Nejsi příhlášen, tato stránka vyžaduje přihlášení.', 'error')
+        return redirect(url_for('login', page=request.full_path))
     return render_template("abc.html", slova=slova)
 
 @app.route("/banán/", methods=["GET", "POST"])
 def banán():
     if 'uživatel' not in session:
-        flash('Nejsi příhlášen, tato stránka vyžaduje přihlášení')
-        return redirect(url_for('login'))
+        flash('Nejsi příhlášen, tato stránka vyžaduje přihlášení.', 'error')
+        return redirect(url_for('login', page=request.full_path))
         
     hmotnost= request.args.get("hmotnost")
     
@@ -75,9 +78,16 @@ def login():
 def login_post():
      jmeno = request.form.get('jmeno')
      heslo = request.form.get('heslo')
+     page = request.args.get('page')
      if jmeno == 'Martin' and heslo=='umbilikus':
+        flash('Jsi přihlášen!', 'message' )
         session['uživatel'] = jmeno
-              
+        if page:
+            return redirect(page)
+     else:
+        flash('Nespávné přihlašovací udaje','error')
+     if page:
+        return redirect( url_for ('login', page=page))
      return redirect( url_for ('login'))
         #stejne jako funkce get, jen jiný zápis
 
