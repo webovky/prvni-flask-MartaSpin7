@@ -11,6 +11,8 @@ app.secret_key = b"x6\x87j@\xd3\x88\x0e8\xe8pM\x13\r\xafa\x8b\xdbp\x8a\x1f\xd41\
 
 slova = ("Super", "Perfekt", "Úža", "Flask")
 
+import sqlite3
+conn = sqlite3.connect('data.db')
 
 def prihlasit(function):
     @functools.wraps(function)
@@ -79,7 +81,16 @@ def login_post():
      jmeno = request.form.get('jmeno')
      heslo = request.form.get('heslo')
      page = request.args.get('page')
-     if jmeno == 'Martin' and heslo=='umbilikus':
+
+     conn = sqlite3.connect('data.db')
+     cur = conn.cursor()
+     cur.execute(f'SELECT passwd FROM user WHERE login = ?', [jmeno])
+     ans = cur.fetchall()
+
+     
+        
+
+     if ans and ans[0][0]== heslo:
         flash('Jsi přihlášen!', 'message' )
         session['uživatel'] = jmeno
         if page:
