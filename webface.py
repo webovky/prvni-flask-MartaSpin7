@@ -1,6 +1,8 @@
 from pickle import GET
 from flask import Flask, render_template, request, redirect, url_for, session, flash
 import functools
+import random
+import string
 
 # from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -106,3 +108,20 @@ def login_post():
 def logout():
     session.pop('uživatel', None)
     return redirect( url_for ('login'))
+
+@app.route("/zkracovač/")
+def zkracovač():
+    return render_template("zkracovač.html")
+
+@app.route("/zkracovač/", methods=["POST"])
+def zkracovač_post():
+    url = request.form.get("url")
+    zkratka = ''.join(random.choices(string.ascii_uppercase +
+                             string.digits, k=5))
+
+    with sqlite3("data.db"):
+            cur.execute(f'SELECT passwd FROM user WHERE login = ?', [jmeno])
+     ans = cur.fetchall()
+
+    
+    return redirect(url_for("zkracovač"))
