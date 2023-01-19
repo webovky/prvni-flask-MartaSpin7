@@ -11,3 +11,4 @@ class SQLite():
     def __exit__(self, type, value, traceback):
         self.conn.commit()
         self.conn.close()
+
