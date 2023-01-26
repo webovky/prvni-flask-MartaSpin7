@@ -5,6 +5,7 @@ import random
 import string
 from mysqlite import SQLite
 import re
+import sqlite3
 
 
 # from werkzeug.security import generate_password_hash, check_password_hash
